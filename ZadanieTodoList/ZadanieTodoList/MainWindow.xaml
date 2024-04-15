@@ -1,0 +1,73 @@
+﻿<Window x:Class="ZadanieTodoList.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZadanieTodoList"
+        mc:Ignorable="d"
+        Title="Todo List" Height="450" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Add" Width="75" Height="30" Margin="0,0,5,0"
+                    Command="{Binding AddCommand}"/>
+            <Button Content="Delete" Width="75" Height="30" Margin="0,0,5,0"
+                    Command="{Binding DeleteCommand}"/>
+            <Button Content="Show All" Width="75" Height="30" Margin="0,0,5,0"
+                    Command="{Binding ShowAllCommand}"/>
+            <DatePicker Name="datePicker" SelectedDate="{Binding DisplayDay}" Height="25"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7.5*"/>
+                <ColumnDefinition Width="2.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid 
+                ItemsSource="{Binding ListItems}"
+                SelectedItem="{Binding SelectedItem}"
+                CanUserAddRows="False" CanUserDeleteRows="False"
+                AutoGenerateColumns="False" 
+                IsReadOnly="True"
+                SelectionMode="Single">
+                <DataGrid.Columns >
+                    <DataGridTextColumn Header="Title" Binding="{Binding Description}" Width="3.5*" />
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='MM/dd/yyyy'}" Width="2.5*"/>
+                    <DataGridCheckBoxColumn Header="Priority" Binding="{Binding Priority}" Width="2*"/>
+                    <DataGridCheckBoxColumn Header="Completed" Binding="{Binding Completed}" Width="2*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Name="editionPanel" Grid.Column="1" Visibility="Hidden">
+                <Label Content="Title"/>
+                <TextBox x:Name="txtBox" 
+                         Margin="5,0,5,15" 
+                         Width="120"
+                         Text="{Binding SelectedItem.Description, UpdateSourceTrigger=PropertyChanged}" 
+                         LostFocus="txtBox_LostFocus"
+                         KeyDown="txtBox_KeyDown"/>
+                
+                <Label Content="Date"/>
+                <DatePicker x:Name="editionDatePicker"  
+                            SelectedDate="{Binding SelectedItem.Date, UpdateSourceTrigger=PropertyChanged}"
+                            Width="120"
+                            Margin="0,0,0,20"
+                            CalendarClosed="editionDatePicker_CalendarClosed"
+                            KeyDown="editionDatePicker_KeyDown"
+                            LostFocus="editionDatePicker_LostFocus"
+                            />
+                            
+                <Button Content="Toggle Priority" Width="120" Height="30" Margin="0,0,0,15"
+                        Command="{Binding PriorityCommand}" />
+
+                <Button Content="Toggle Completed" Width="120" Height="30" Margin="0,0,0,15"
+                        Command="{Binding CompletedCommand}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
