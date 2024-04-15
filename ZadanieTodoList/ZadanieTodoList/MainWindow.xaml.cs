@@ -37,14 +37,5 @@ namespace ZadanieTodoList
         {
             vm.UpdateCommand.Execute(null);
         }
-
-        private void editionDatePicker_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                vm.UpdateCommand.Execute(null);
-                Keyboard.ClearFocus();
-            }
-        }
     }
 }

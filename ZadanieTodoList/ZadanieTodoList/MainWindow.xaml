@@ -58,8 +58,7 @@
                             Width="120"
                             Margin="0,0,0,20"
                             CalendarClosed="editionDatePicker_CalendarClosed"
-                            KeyDown="editionDatePicker_KeyDown"
-                            LostFocus="editionDatePicker_LostFocus"
+                            LostFocus="editionDatePicker_LostFocus"          
                             />
                             
                 <Button Content="Toggle Priority" Width="120" Height="30" Margin="0,0,0,15"
