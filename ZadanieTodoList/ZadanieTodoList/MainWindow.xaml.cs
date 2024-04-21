@@ -10,30 +10,26 @@ namespace ZadanieTodoList
         public MainWindow()
         {
             InitializeComponent();
-            vm = new MainWindowViewModel(datePicker, editionPanel);
+            vm = new MainWindowViewModel(datePicker);
             DataContext = vm;
         }
 
-        private void txtBox_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             vm.UpdateCommand.Execute(null);
         }
 
-        private void txtBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                vm.UpdateCommand.Execute(null);
-                Keyboard.ClearFocus();
-            }
-        }
-
-        private void editionDatePicker_CalendarClosed(object sender, RoutedEventArgs e)
+        private void DatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             vm.UpdateCommand.Execute(null);
         }
 
-        private void editionDatePicker_LostFocus(object sender, RoutedEventArgs e)
+        private void CheckBoxPriority_Click(object sender, RoutedEventArgs e)
+        {
+            vm.UpdateCommand.Execute(null);
+        }
+
+        private void CheckBoxCompleted_Click(object sender, RoutedEventArgs e)
         {
             vm.UpdateCommand.Execute(null);
         }

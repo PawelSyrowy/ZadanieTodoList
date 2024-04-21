@@ -33,40 +33,52 @@
                 SelectedItem="{Binding SelectedItem}"
                 CanUserAddRows="False" CanUserDeleteRows="False"
                 AutoGenerateColumns="False" 
-                IsReadOnly="True"
                 SelectionMode="Single">
+                
                 <DataGrid.Columns >
-                    <DataGridTextColumn Header="Title" Binding="{Binding Description}" Width="3.5*" />
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='MM/dd/yyyy'}" Width="2.5*"/>
-                    <DataGridCheckBoxColumn Header="Priority" Binding="{Binding Priority}" Width="2*"/>
-                    <DataGridCheckBoxColumn Header="Completed" Binding="{Binding Completed}" Width="2*"/>
+                    <DataGridTemplateColumn Header="Title" Width="3.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Description, UpdateSourceTrigger = PropertyChanged}" 
+                                         LostFocus="TextBox_LostFocus"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn Header="Date" Width="2.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger = PropertyChanged}"
+                                            SelectedDateFormat="Short"
+                                            SelectedDateChanged="DatePicker_SelectedDateChanged"
+                                            />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Priority" Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Priority, UpdateSourceTrigger = PropertyChanged}"
+                                          Click="CheckBoxPriority_Click"
+                                          />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Completed" Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Completed, UpdateSourceTrigger = PropertyChanged}"
+                                          Click="CheckBoxCompleted_Click"
+                                          />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-
-            <StackPanel Name="editionPanel" Grid.Column="1" Visibility="Hidden">
-                <Label Content="Title"/>
-                <TextBox x:Name="txtBox" 
-                         Margin="5,0,5,15" 
-                         Width="120"
-                         Text="{Binding SelectedItem.Description, UpdateSourceTrigger=PropertyChanged}" 
-                         LostFocus="txtBox_LostFocus"
-                         KeyDown="txtBox_KeyDown"/>
-                
-                <Label Content="Date"/>
-                <DatePicker x:Name="editionDatePicker"  
-                            SelectedDate="{Binding SelectedItem.Date, UpdateSourceTrigger=PropertyChanged}"
-                            Width="120"
-                            Margin="0,0,0,20"
-                            CalendarClosed="editionDatePicker_CalendarClosed"
-                            LostFocus="editionDatePicker_LostFocus"          
-                            />
-                            
-                <Button Content="Toggle Priority" Width="120" Height="30" Margin="0,0,0,15"
-                        Command="{Binding PriorityCommand}" />
-
-                <Button Content="Toggle Completed" Width="120" Height="30" Margin="0,0,0,15"
-                        Command="{Binding CompletedCommand}"/>
-            </StackPanel>
         </Grid>
     </Grid>
 </Window>
+
+    

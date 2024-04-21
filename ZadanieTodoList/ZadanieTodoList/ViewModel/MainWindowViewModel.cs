@@ -9,22 +9,20 @@ namespace ZadanieTodoList.ViewModel
     internal class MainWindowViewModel : ViewModelBase
     {
         private DatePicker datePicker;
-        private StackPanel editionPanel;
         private bool showAll;
         private List<Task> Tasks { get; set; }
         public ObservableCollection<Task> ListItems { get; set; }
 
         public RelayCommand AddCommand => new RelayCommand(execute => AddTask());
-        public RelayCommand DeleteCommand => new RelayCommand(execute => DeleteTask(), canExecute => SelectedItem != null);
+        public RelayCommand DeleteCommand => new RelayCommand(execute => DeleteTask(), canExecute => lastSelectedItem != null);
         public RelayCommand UpdateCommand => new RelayCommand(execute => UpdateTask(), canExecute => SelectedItem != null);
         public RelayCommand ShowAllCommand => new RelayCommand(execute => ShowAllTasks());
         public RelayCommand PriorityCommand => new RelayCommand(execute => TogglePriority(), canExecute => SelectedItem != null);
         public RelayCommand CompletedCommand => new RelayCommand(execute => ToggleCompleted(), canExecute => SelectedItem != null);
 
-        public MainWindowViewModel(DatePicker datePicker, StackPanel editionPanel)
+        public MainWindowViewModel(DatePicker datePicker)
         {
             this.datePicker = datePicker;
-            this.editionPanel = editionPanel;
             showAll = false;
             Tasks = new List<Task>();
             ListItems = new ObservableCollection<Task>();
@@ -38,6 +36,7 @@ namespace ZadanieTodoList.ViewModel
             RefreshItems();
         }
 
+        private Task lastSelectedItem;
         private Task selectedItem;
         public Task SelectedItem
         {
@@ -47,11 +46,7 @@ namespace ZadanieTodoList.ViewModel
                 selectedItem = value;
                 if (selectedItem != null)
                 {
-                    editionPanel.Visibility = System.Windows.Visibility.Visible;
-                }
-                else
-                {
-                    editionPanel.Visibility = System.Windows.Visibility.Hidden;
+                    lastSelectedItem = selectedItem;
                 }
                 OnPropertyChanged();
             }
@@ -64,8 +59,17 @@ namespace ZadanieTodoList.ViewModel
             set
             {
                 displayDay = value;
-                showAll = false;
-                RefreshItems();
+                if (displayDay != null)
+                {
+                    showAll = false;
+                    RefreshItems();
+                }
+                else
+                {
+                    showAll = true;
+                    RefreshItems();
+                }
+
             }
         }
 
@@ -84,20 +88,20 @@ namespace ZadanieTodoList.ViewModel
 
             Tasks.Add(MapToViewModel(taskDb));
             RefreshItems();
-            FocusItem(taskDb.Id);
         }
 
         private void DeleteTask()
         {
-            var foundEntity = DatabaseLocator.Database.WorkTasks.FirstOrDefault(x => x.Id == selectedItem.Id);
+            var foundEntity = DatabaseLocator.Database.WorkTasks.FirstOrDefault(x => x.Id == lastSelectedItem.Id);
             if (foundEntity != null)
             {
                 DatabaseLocator.Database.WorkTasks.Remove(foundEntity);
                 SaveDatabase();
             }
 
-            Tasks.Remove(selectedItem);
+            Tasks.Remove(lastSelectedItem);
             RefreshItems();
+            lastSelectedItem = selectedItem;
         }
 
         private void UpdateTask()
@@ -129,8 +133,6 @@ namespace ZadanieTodoList.ViewModel
         private void ShowAllTasks()
         {
             datePicker.SelectedDate = null;
-            showAll = true;
-            RefreshItems();
         }
 
         private void TogglePriority()
@@ -147,15 +149,8 @@ namespace ZadanieTodoList.ViewModel
 
         private void RefreshItems()
         {
-            int ? selectedItemId = null;
-            if(selectedItem!=null)
-            {
-                selectedItemId = selectedItem.Id;
-            }
-
             ListItems.Clear();
             LoadItems();
-            FocusItem(selectedItemId);
         }
 
         private void LoadItems()
@@ -176,16 +171,6 @@ namespace ZadanieTodoList.ViewModel
                         ListItems.Add(task);
                     }
                 }
-            }
-        }
-        
-        private void FocusItem(int ? id)
-        {
-            var foundItem = ListItems.FirstOrDefault(x => x.Id == id);
-
-            if (foundItem != null)
-            {
-                SelectedItem = foundItem;
             }
         }
 

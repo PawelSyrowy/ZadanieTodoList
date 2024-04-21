@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZadanieTodoList", "ZadanieTodoList\ZadanieTodoList.csproj", "{FC0B468D-E73F-4FC5-803D-1116C11CA69D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZadanieTodoList.Database", "ZadanieTodoList.Database\ZadanieTodoList.Database.csproj", "{C56D638C-ED58-4C27-BA22-8DB080658393}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZadanieTodoList.Database", "ZadanieTodoList.Database\ZadanieTodoList.Database.csproj", "{C56D638C-ED58-4C27-BA22-8DB080658393}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
